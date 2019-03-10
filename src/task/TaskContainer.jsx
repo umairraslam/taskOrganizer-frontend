@@ -1,7 +1,6 @@
 import React from 'react';
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment';
-import events from './events';
 import dates from './dates';
 import { Button } from '@material-ui/core';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -10,8 +9,17 @@ import CustomDialog from '../reusable/Dialog/CustomDialog';
 import { addTask, getTasksByUser } from '../actions/task';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import {Add}  from "@material-ui/icons";
 
-
+const styles = theme => ({
+    button: {
+        float: 'right'
+    },
+    marginAround: {
+        margin: '1.2rem'
+    }
+});
 class TaskContainer extends React.Component {
 
     constructor(props) {
@@ -65,10 +73,14 @@ class TaskContainer extends React.Component {
     }
     render() {
         let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
-        const localizer = BigCalendar.momentLocalizer(moment)
+        const localizer = BigCalendar.momentLocalizer(moment);
+        const { classes } = this.props;
         return (
-            <div style={{ height: 700 }}>
-                <Button onClick={this.showDialog} alignt="right" variant="contained" color="primary" >Add Task</Button>
+            <div>
+                <div style={{ display: "flex", justifyContent: "space-between", float:"right" }}>
+                    <Button onClick={this.showDialog} className={classes.marginAround} alignt="right" variant="contained" color="primary" ><Add/> Add Task</Button>
+                </div>
+                <div style={{ display: "inline-block", height: 700, width: '100%' }}>
                 {this.props.tasks && <BigCalendar
                     events={this.props.tasks}
                     views={allViews}
@@ -78,6 +90,7 @@ class TaskContainer extends React.Component {
                     defaultDate={new Date()}
                     localizer={localizer}
                 />}
+                </div>
                 <CustomDialog
                     width="xs"
                     handleMount={this.state.showAddTaskDialog}
@@ -101,4 +114,4 @@ const mapStateToProps = state => {
     };
 }
 
-export default withRouter(connect(mapStateToProps)(TaskContainer));  
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(TaskContainer)));  

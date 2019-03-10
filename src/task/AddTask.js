@@ -146,8 +146,8 @@ class AddTaskForm extends React.Component {
                     <MenuItem value="50">50</MenuItem>
                     <MenuItem value="55">55</MenuItem>
                 </Field></div>
-    
-    
+
+                <br/>
                 {/* {this.state.allDayEvent && <div> */}
                     <Field
                     name="end"
