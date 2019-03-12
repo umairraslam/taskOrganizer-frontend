@@ -6,6 +6,7 @@ import asyncValidate from '../reusable/reduxForm/asyncValidate'
 import { renderTextField } from '../reusable/reduxForm/FormAttributes'
 import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
+import '../App.css';
 
 const styles = theme => ({
   container: {

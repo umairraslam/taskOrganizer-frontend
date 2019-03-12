@@ -45,6 +45,29 @@ export function addTask(payload) {
     };
 }
 
+export function updateTask(payload, id) {
+    return (dispatch) => {
+        dispatch(showLoader());
+        taskService.updateTask(payload, id)
+        .then((result) => {
+            if(result.ok){
+                result.json().then((json) => {
+                    dispatch(showSuccess(json.message));
+                    dispatch(getTasksByUser(payload.userId))
+                })
+            } else{
+                result.json().then((json) => {
+                    dispatch(hideLoader());
+                    dispatch(showError(json.message));
+                })
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    };
+}
+
 export function getTasks() {
     return (dispatch) => {
         dispatch(showLoader());
