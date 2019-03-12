@@ -25,12 +25,14 @@ class TaskContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showAddTaskDialog: false
+            showAddTaskDialog: false,
+            initialValues:{}
         };
 
         this.closeTaskDialog = this.closeTaskDialog.bind(this);
         this.showDialog = this.showDialog.bind(this);
         this.submitTaskForm = this.submitTaskForm.bind(this);
+        this.addEventOnClick = this.addEventOnClick.bind(this);
     }
 
     componentDidMount() {
@@ -41,6 +43,29 @@ class TaskContainer extends React.Component {
         console.log("addTask")
         this.setState({
             showAddTaskDialog: true
+        });
+    }
+    addEventOnClick(timeSlot) {
+        console.log(timeSlot);
+        console.log(typeof timeSlot.start);
+        // let myDate = moment(timeSlot.start,"dd YYYY-MM-DD")
+        let myDate = Date.parse(timeSlot.start)
+
+        console.log(myDate)
+        myDate = new Date(myDate);
+        console.log(myDate.toLocaleDateString())
+        this.setState({
+            showAddTaskDialog: true,
+            initialValues: {
+                            title:'', 
+                            start: myDate.getFullYear() + "-" + ((myDate.getMonth()+1)<=9?"0"+(myDate.getMonth()+1): (myDate.getMonth()+1)) + "-" + (myDate.getDate()<=9?"0"+myDate.getDate():myDate.getDate()), 
+                            selectStartHour: (myDate.getHours()<=9)?"0"+myDate.getHours():myDate.getHours().toString(), 
+                            selectStartMinute: (myDate.getMinutes()<=9)?"0"+myDate.getMinutes():myDate.getMinutes().toString(),
+                            end: myDate.getFullYear() + "-" + ((myDate.getMonth()+1)<=9?"0"+(myDate.getMonth()+1): (myDate.getMonth()+1)) + "-" + (myDate.getDate()<=9?"0"+myDate.getDate():myDate.getDate()), 
+                            selectEndHour: (myDate.getHours()<=9)?"0"+myDate.getHours():myDate.getHours().toString(), 
+                            selectEndMinute: ((myDate.getMinutes()+15)<=9)?"0"+(myDate.getMinutes()+15):(myDate.getMinutes()+15).toString(),
+                            desc:''
+                        }
         });
     }
     closeTaskDialog() {
@@ -54,11 +79,11 @@ class TaskContainer extends React.Component {
         
         if(values.allDay == false){
             let spSt = values.start.split("-");
-            let startDate = new Date(spSt[0], parseInt(spSt[1])-1,spSt[2], values.selectStartHour, values.selectStartMinute);
+            let startDate = new Date(spSt[0], parseInt(spSt[1])-1,spSt[2], parseInt(values.selectStartHour), parseInt(values.selectStartMinute));
             values.start = startDate;
     
             spSt = values.end.split("-");
-            let endDate = new Date(spSt[0], parseInt(spSt[1])-1,spSt[2], values.selectEndHour, values.selectEndMinute);
+            let endDate = new Date(spSt[0], parseInt(spSt[1])-1,spSt[2], parseInt(values.selectEndHour), parseInt(values.selectEndMinute));
             values.end = endDate;    
         }
         delete values["selectStartHour"];
@@ -82,6 +107,7 @@ class TaskContainer extends React.Component {
                 </div>
                 <div style={{ display: "inline-block", height: 700, width: '100%' }}>
                 {this.props.tasks && <BigCalendar
+                    selectable
                     events={this.props.tasks}
                     views={allViews}
                     step={60}
@@ -89,13 +115,14 @@ class TaskContainer extends React.Component {
                     max={dates.add(dates.endOf(new Date(2015, 17, 1), 'day'), -1, 'hours')}
                     defaultDate={new Date()}
                     localizer={localizer}
+                    onSelectSlot={this.addEventOnClick}
                 />}
                 </div>
                 <CustomDialog
                     width="xs"
                     handleMount={this.state.showAddTaskDialog}
                     dialogTitle={"Add Task"}
-                    dialogContent={<AddTaskForm onSubmit={this.submitTaskForm} />}
+                    dialogContent={<AddTaskForm initialValues={this.state.initialValues ? this.state.initialValues : ""} onSubmit={this.submitTaskForm} />}
                     topCloseButton={true}
                     handleUnmount={this.closeTaskDialog}
                 />
