@@ -6,6 +6,7 @@ import asyncValidate from '../reusable/reduxForm/asyncValidate'
 import { renderTextField, renderCheckbox, renderTextFieldCustom, renderSelectField } from '../reusable/reduxForm/FormAttributes'
 import "react-datepicker/dist/react-datepicker.css";
 import '../App.css';
+import { Delete } from "@material-ui/icons";
 
 const styles = theme => ({
     container: {
@@ -28,6 +29,10 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
     },
+    marginAround: {
+        margin: '1.2rem'
+    }
+
 });
 
 const validate = values => {
@@ -78,14 +83,6 @@ class AddTaskForm extends React.Component {
         }
     }
 
-    // static getDerivedStateFromProps(nextProps, prevState) {
-    //     console.log(nextProps)
-    //     console.log(prevState)
-    //     if (nextProps.initialValues && nextProps.initialValues.allDay && !prevState.allDayEvent) {
-    //         return { allDayEvent: nextProps.initialValues.allDay };
-    //     }
-    // }
-
     toggleAllDay(event) {
         let temp = this.state.allDayEvent;
         console.log(temp)
@@ -95,9 +92,19 @@ class AddTaskForm extends React.Component {
         });
     }
 
+    deleteTask(id) {
+        console.log("deleteTask " + id)
+        this.props.onDelete(id);
+    }
+
     render() {
         const { classes, handleSubmit, submitting } = this.props
         return (
+            <div>
+              {this.props.initialValues && this.props.initialValues.id && <div style={{ display: "flex", justifyContent: "space-between", float: "right" }}>
+            <Button onClick={()=>this.deleteTask(this.props.initialValues.id)} alignt="right" variant="contained" color="primary" ><Delete/></Button>
+        </div>}
+
             <form onSubmit={handleSubmit} className={classes.container} noValidate autoComplete="off">
                 <Field
                     name="title"
@@ -269,6 +276,7 @@ class AddTaskForm extends React.Component {
                 />
                 <Button type="submit" variant="contained" size="large" disabled={submitting} color="primary" className={classes.btnBlock} >{this.props.buttonText}</Button>
             </form>
+            </div>
         )
 
     }

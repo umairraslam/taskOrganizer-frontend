@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import AddTaskForm from './AddTask';
 import CustomDialog from '../reusable/Dialog/CustomDialog';
-import { addTask, getTasksByUser, updateTask } from '../actions/task';
+import { addTask, getTasksByUser, updateTask, deleteTask } from '../actions/task';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -37,6 +37,7 @@ class TaskContainer extends React.Component {
         this.addEventOnClick = this.addEventOnClick.bind(this);
         this.onSelectEvent = this.onSelectEvent.bind(this);
         this.updateTask = this.updateTask.bind(this);
+        this.onDelete = this.onDelete.bind(this);
     }
 
     componentDidMount() {
@@ -158,9 +159,14 @@ class TaskContainer extends React.Component {
                 selectEndHour: (myDateEnd.getHours() <= 9) ? "0" + myDateEnd.getHours() : myDateEnd.getHours().toString(),
                 selectEndMinute: ((myDateEnd.getMinutes()) <= 9) ? "0" + (myDateEnd.getMinutes()) : (myDateEnd.getMinutes()).toString(),
                 desc: timeSlot.desc,
-                allDay: timeSlot.allDay
+                allDay: timeSlot.allDay,
+                id: timeSlot._id
             }
         });
+    }
+    onDelete(id){
+        this.props.dispatch(deleteTask(id, this.props.user._id));
+        this.closeTaskDialog();
     }
     render() {
         let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
@@ -190,7 +196,7 @@ class TaskContainer extends React.Component {
                     width="xs"
                     handleMount={this.state.showAddTaskDialog}
                     dialogTitle={this.state.updateFlag ? "Update Task" : "Create Task"}
-                    dialogContent={<AddTaskForm initialValues={this.state.initialValues ? this.state.initialValues : ""} onSubmit={this.state.initialValues ? this.updateTask : this.submitTaskForm} buttonText={this.state.updateFlag ? "Update Task" : "Create Task"} />}
+                    dialogContent={<AddTaskForm initialValues={this.state.initialValues ? this.state.initialValues : ""} onSubmit={this.state.initialValues ? this.updateTask : this.submitTaskForm} buttonText={this.state.updateFlag ? "Update Task" : "Create Task"} onDelete={this.onDelete} />}
                     topCloseButton={true}
                     handleUnmount={this.closeTaskDialog}
                 />

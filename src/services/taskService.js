@@ -2,7 +2,8 @@ export const taskService = {
     getAllTasks,
     addTask,
     getAllTasksByUser,
-    updateTask
+    updateTask,
+    deleteTask
 }
 
 const URL = process.env.REACT_APP_BACKEND_API_URL + "/task";
@@ -37,6 +38,14 @@ function updateTask(payload, id){
         method:'PUT',
         headers:{"Content-Type":"application/json", "authorization": token},
         body: JSON.stringify(payload)
+    };
+    return fetch(URL+"/"+id, config);
+}
+
+function deleteTask(id){
+    let config = {
+        method:'DELETE',
+        headers:{"Content-Type":"application/json", "authorization": token}
     };
     return fetch(URL+"/"+id, config);
 }
