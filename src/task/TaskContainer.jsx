@@ -6,6 +6,7 @@ import { Button } from '@material-ui/core';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import AddTaskForm from './AddTask';
 import CustomDialog from '../reusable/Dialog/CustomDialog';
+import ConfirmationDialog from '../reusable/Dialog/ConfirmationDialog';
 import { addTask, getTasksByUser, updateTask, deleteTask } from '../actions/task';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -28,7 +29,8 @@ class TaskContainer extends React.Component {
             showAddTaskDialog: false,
             initialValues: null,
             selectedEvent: {},
-            updateFlag: false
+            updateFlag: false,
+            showDeleteConfirmationDialog: false
         };
 
         this.closeTaskDialog = this.closeTaskDialog.bind(this);
@@ -38,6 +40,8 @@ class TaskContainer extends React.Component {
         this.onSelectEvent = this.onSelectEvent.bind(this);
         this.updateTask = this.updateTask.bind(this);
         this.onDelete = this.onDelete.bind(this);
+        this.handleCloseDeleteModal = this.handleCloseDeleteModal.bind(this);
+        this.showDeleteDialog = this.showDeleteDialog.bind(this);
     }
 
     componentDidMount() {
@@ -84,13 +88,13 @@ class TaskContainer extends React.Component {
         let startDate = new Date(spSt[0], parseInt(spSt[1]) - 1, spSt[2], parseInt(values.selectStartHour), parseInt(values.selectStartMinute));
         values.start = startDate;
 
-        if(values.allDay == false){
+        if (values.allDay == false) {
             spSt = values.end.split("-");
             let endDate = new Date(spSt[0], parseInt(spSt[1]) - 1, spSt[2], parseInt(values.selectEndHour), parseInt(values.selectEndMinute));
-            values.end = endDate;    
-        } else{
+            values.end = endDate;
+        } else {
             let endDate = new Date(spSt[0], parseInt(spSt[1]) - 1, spSt[2], parseInt("23"), parseInt("59"));
-            values.end = endDate;    
+            values.end = endDate;
         }
 
         delete values["selectStartHour"];
@@ -115,13 +119,13 @@ class TaskContainer extends React.Component {
         let startDate = new Date(spSt[0], parseInt(spSt[1]) - 1, spSt[2], parseInt(values.selectStartHour), parseInt(values.selectStartMinute));
         values.start = startDate;
 
-        if(values.allDay == false){
+        if (values.allDay == false) {
             spSt = values.end.split("-");
             let endDate = new Date(spSt[0], parseInt(spSt[1]) - 1, spSt[2], parseInt(values.selectEndHour), parseInt(values.selectEndMinute));
-            values.end = endDate;    
-        } else{
+            values.end = endDate;
+        } else {
             let endDate = new Date(spSt[0], parseInt(spSt[1]) - 1, spSt[2], parseInt("23"), parseInt("55"));
-            values.end = endDate;    
+            values.end = endDate;
         }
 
         delete values["selectStartHour"];
@@ -164,9 +168,22 @@ class TaskContainer extends React.Component {
             }
         });
     }
-    onDelete(id){
+    showDeleteDialog(){
+        this.setState({
+            showDeleteConfirmationDialog: true
+        })
+    }
+    onDelete(id) {
         this.props.dispatch(deleteTask(id, this.props.user._id));
-        this.closeTaskDialog();
+        this.setState({
+            showDeleteConfirmationDialog: false,
+            showAddTaskDialog: false
+        })
+    }
+    handleCloseDeleteModal() {
+        this.setState({
+            showDeleteConfirmationDialog: false
+        })
     }
     render() {
         let allViews = Object.keys(BigCalendar.Views).map(k => BigCalendar.Views[k])
@@ -196,9 +213,18 @@ class TaskContainer extends React.Component {
                     width="xs"
                     handleMount={this.state.showAddTaskDialog}
                     dialogTitle={this.state.updateFlag ? "Update Task" : "Create Task"}
-                    dialogContent={<AddTaskForm initialValues={this.state.initialValues ? this.state.initialValues : ""} onSubmit={this.state.initialValues ? this.updateTask : this.submitTaskForm} buttonText={this.state.updateFlag ? "Update Task" : "Create Task"} onDelete={this.onDelete} />}
+                    dialogContent={<AddTaskForm initialValues={this.state.initialValues ? this.state.initialValues : ""} onSubmit={this.state.initialValues ? this.updateTask : this.submitTaskForm} buttonText={this.state.updateFlag ? "Update Task" : "Create Task"} showDeleteDialog={this.showDeleteDialog} />}
                     topCloseButton={true}
                     handleUnmount={this.closeTaskDialog}
+                />
+                <ConfirmationDialog
+                    open={this.state.showDeleteConfirmationDialog}
+                    dialogTitle={"Delete Task"}
+                    dialogContent={"Are you sure you want to delete this task?"}
+                    buttonTwoTitle={"Cancel"}
+                    buttonOneTitle={"Yes"}
+                    handleClose={this.handleCloseDeleteModal}
+                    handleFinalApproval={() => this.onDelete(this.state.selectedEvent._id)}
                 />
             </div>
         )

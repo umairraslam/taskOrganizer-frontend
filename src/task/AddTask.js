@@ -92,9 +92,8 @@ class AddTaskForm extends React.Component {
         });
     }
 
-    deleteTask(id) {
-        console.log("deleteTask " + id)
-        this.props.onDelete(id);
+    deleteTask() {
+        this.props.showDeleteDialog();
     }
 
     render() {
@@ -102,7 +101,7 @@ class AddTaskForm extends React.Component {
         return (
             <div>
               {this.props.initialValues && this.props.initialValues.id && <div style={{ display: "flex", justifyContent: "space-between", float: "right" }}>
-            <Button onClick={()=>this.deleteTask(this.props.initialValues.id)} alignt="right" variant="contained" color="primary" ><Delete/></Button>
+            <Button onClick={()=>this.deleteTask()} alignt="right" variant="contained" color="primary" ><Delete/></Button>
         </div>}
 
             <form onSubmit={handleSubmit} className={classes.container} noValidate autoComplete="off">
