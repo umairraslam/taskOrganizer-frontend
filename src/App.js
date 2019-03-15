@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import {logoutUser} from './actions/auth';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Profile from './profile/Profile';
 
 const PrivateRoute = ({ props ,component, isAuthenticated, ...rest }) => ( // eslint-disable-line
   jwt.verify(localStorage.getItem('token')

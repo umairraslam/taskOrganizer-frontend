@@ -2,11 +2,11 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { logoutUser } from '../actions/auth';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import TaskContainer from '../task/TaskContainer';
 import withStyles from '@material-ui/core/styles/withStyles';
 import MenuAppBar from '../reusable/Menu/MenuAppBar';
-
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import Profile from '../profile/Profile';
 const styles = theme => ({
     headerWrapper: {
         display: 'flex',
@@ -21,18 +21,26 @@ class Landing extends React.Component {
     constructor(props) {
         super(props);
         this.logout = this.logout.bind(this);
+        this.redirectToProfile = this.redirectToProfile.bind(this);
     }
 
     logout() {
         console.log("logout")
         this.props.dispatch(logoutUser());
     }
+    redirectToProfile() {
+        this.props.history.push('/app/profile');
+    }
     render() {
         const classes = this.props;
         return (
             <div>
-                <MenuAppBar title={"Task Organizer"} logout={this.logout} />     
-                <TaskContainer />           
+                <MenuAppBar title={"Task Organizer"} logout={this.logout} profileRedirect={this.redirectToProfile} />
+                <Switch>
+                    <Route path="/app/profile" component={Profile} />
+                    <Route path="/app" exact component={TaskContainer} />
+                </Switch>
+                
             </div>
         )
     }
