@@ -92,7 +92,7 @@ class MenuAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  {/* <MenuItem to={"/app/profile"} component={Link}>Profile</MenuItem> */}
+                  <MenuItem onClick={this.props.dashboardRedirect}>Dashboard</MenuItem>
                   <MenuItem onClick={this.props.profileRedirect}>Profile</MenuItem>
                   <MenuItem onClick={this.props.logout}>Logout</MenuItem>
                 </Menu>

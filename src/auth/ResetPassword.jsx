@@ -6,8 +6,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import SignInForm from './SignInForm';
-import ForgotPasswordForm from './ForgotPasswordForm';
-import { loginUser } from '../actions/auth';
+import ResetPasswordForm from './ResetPasswordForm';
+import { resetPassword } from '../actions/auth';
 
 const styles = theme => ({
     main: {
@@ -41,16 +41,16 @@ const styles = theme => ({
     },
 });
 
-class SignIn extends React.Component {
+class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
-        this.doLogin = this.doLogin.bind(this);
+        this.doResetPassword = this.doResetPassword.bind(this);
 
     }
 
-    doLogin(values) {
+    doResetPassword(values) {
         console.log(values)
-        this.props.dispatch(loginUser({ email: values.email.toString().toLowerCase(), password: values.password }));
+        this.props.dispatch(resetPassword({ token:this.props.match.params.resettoken, password: values.password }));
     }
 
     render() {
@@ -66,14 +66,14 @@ class SignIn extends React.Component {
             <main className={classes.main}>
                 <CssBaseline />
                 <Paper className={classes.paper}>
-                    <SignInForm onSubmit={this.doLogin} />
+                    <ResetPasswordForm onSubmit={this.doResetPassword} />
                 </Paper>
             </main>
         );
     }
 }
 
-SignIn.propTypes = {
+ResetPassword.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 const mapStateToProps = state => {
@@ -86,4 +86,4 @@ const mapStateToProps = state => {
     };
 }
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles)(SignIn)));
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(ResetPassword)));

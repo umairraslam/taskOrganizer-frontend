@@ -22,6 +22,7 @@ class Landing extends React.Component {
         super(props);
         this.logout = this.logout.bind(this);
         this.redirectToProfile = this.redirectToProfile.bind(this);
+        this.dashboardRedirect = this.dashboardRedirect.bind(this);
     }
 
     logout() {
@@ -31,11 +32,14 @@ class Landing extends React.Component {
     redirectToProfile() {
         this.props.history.push('/app/profile');
     }
+    dashboardRedirect() {
+        this.props.history.push('/app');
+    }
     render() {
         const classes = this.props;
         return (
             <div>
-                <MenuAppBar title={"Task Organizer"} logout={this.logout} profileRedirect={this.redirectToProfile} />
+                <MenuAppBar title={"Task Organizer"} logout={this.logout} profileRedirect={this.redirectToProfile} dashboardRedirect={this.dashboardRedirect} />
                 <Switch>
                     <Route path="/app/profile" component={Profile} />
                     <Route path="/app" exact component={TaskContainer} />

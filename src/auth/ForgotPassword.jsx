@@ -5,9 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
-import SignInForm from './SignInForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
-import { loginUser } from '../actions/auth';
+import { forgotPassword } from '../actions/auth';
 
 const styles = theme => ({
     main: {
@@ -41,16 +40,16 @@ const styles = theme => ({
     },
 });
 
-class SignIn extends React.Component {
+class ForgotPassword extends React.Component {
     constructor(props) {
         super(props);
-        this.doLogin = this.doLogin.bind(this);
+        this.doForgotPassword = this.doForgotPassword.bind(this);
 
     }
 
-    doLogin(values) {
+    doForgotPassword(values) {
         console.log(values)
-        this.props.dispatch(loginUser({ email: values.email.toString().toLowerCase(), password: values.password }));
+        this.props.dispatch(forgotPassword({ email: values.email.toString().toLowerCase()}));
     }
 
     render() {
@@ -66,14 +65,14 @@ class SignIn extends React.Component {
             <main className={classes.main}>
                 <CssBaseline />
                 <Paper className={classes.paper}>
-                    <SignInForm onSubmit={this.doLogin} />
+                    <ForgotPasswordForm onSubmit={this.doForgotPassword} />
                 </Paper>
             </main>
         );
     }
 }
 
-SignIn.propTypes = {
+ForgotPassword.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 const mapStateToProps = state => {
@@ -81,9 +80,8 @@ const mapStateToProps = state => {
         isProcessing: state.auth.isProcessing,
         isProcessed: state.auth.isProcessed,
         token: state.auth.token,
-        user: state.auth.user,
-        isAuthenticated: state.auth.isAuthenticated
+        user: state.auth.user
     };
 }
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles)(SignIn)));
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(ForgotPassword)));

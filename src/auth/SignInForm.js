@@ -43,7 +43,7 @@ const SignInForm = props => {
   const { classes, handleSubmit, submitting } = props
   return (
     <form onSubmit={handleSubmit} className={classes.container} noValidate autoComplete="off">
-    <img className={classes.logo} src={logo} alt="digibuild-logo" />
+    <img className={classes.logo} src={logo} alt="logo" />
         <Field
           name="email"
           type="email"
