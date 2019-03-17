@@ -126,6 +126,48 @@ export function resetPassword(payload){
     }
 }
 
+export function resetPasswordInternal(payload){
+    return(dispatch) => {
+        dispatch(showLoader());
+        authService.resetPasswordInternal(payload).then((response) => {
+            if(response.ok){
+                response.json().then((json) => {
+                    dispatch(hideLoader());
+                    dispatch(showSuccess(json.message))        
+                })
+            } else{
+                response.json().then((json) => {
+                    dispatch(hideLoader());
+                    dispatch(showError(json.message))        
+                })
+            }
+        }).catch((err) => {
+
+        })
+    }
+}
+
+export function signUp(payload){
+    return(dispatch) => {
+        dispatch(showLoader());
+        authService.signUp(payload).then((response) => {
+            if(response.ok){
+                response.json().then((json) => {
+                    dispatch(hideLoader());
+                    dispatch(showSuccess(json.message))        
+                })
+            } else{
+                response.json().then((json) => {
+                    dispatch(hideLoader());
+                    dispatch(showError(json.message))        
+                })
+            }
+        }).catch((err) => {
+
+        })
+    }
+}
+
 export function loginUser(creds) {
     return (dispatch) => {
         dispatch(requestlogin(creds));

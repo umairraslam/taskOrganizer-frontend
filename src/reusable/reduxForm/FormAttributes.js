@@ -26,7 +26,7 @@ export const renderTextField = ({
         {...input}
         {...custom}
       />
-      {touched && ((error && <p className="inline-error">{label} is Required</p>))}
+      {touched && ((error && <p className="inline-error">{label} {error}</p>))}
     </div>
 
   )

@@ -2,7 +2,9 @@ export const authService = {
     login,
     editProfile,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    signUp,
+    resetPasswordInternal
 }
 
 const URL = process.env.REACT_APP_BACKEND_API_URL + "/user";
@@ -18,6 +20,16 @@ function login(email, password){
     };
     return fetch(URL+"/login", config);
 }
+
+function signUp(payload){
+    let config = {
+        method:'POST',
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(payload)
+    };
+    return fetch(URL+"/signUp", config);
+}
+
 
 function editProfile(id, payload){
     let config = {
@@ -44,4 +56,13 @@ function resetPassword(payload){
         body: JSON.stringify(payload)
     };
     return fetch(URL+"/resetPassword", config);
+}
+
+function resetPasswordInternal(payload){
+    let config = {
+        method:'PUT',
+        headers:{"Content-Type":"application/json", "authorization": token},
+        body: JSON.stringify(payload)
+    };
+    return fetch(URL+"/resetPassword/internal", config);
 }

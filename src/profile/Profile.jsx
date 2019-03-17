@@ -9,7 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import { Button } from '@material-ui/core';
 import CustomDialog from '../reusable/Dialog/CustomDialog';
 import UserProfileForm from './UserProfile';
-import {editProfile} from '../actions/auth';
+import {editProfile, resetPasswordInternal} from '../actions/auth';
+import ChangePasswordInternalForm from './ChangePasswordInternalForm';
 
 const styles = theme => ({
     button: {
@@ -24,14 +25,28 @@ class Profile extends React.Component {
         super(props);
         this.state={
             showEditProfileDialog: false,
-            initialValues: {}
+            initialValues: {},
+            showChangePasswordDialog: false
         }
         this.showDialog = this.showDialog.bind(this);
+        this.showCPDialog = this.showCPDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
+        this.closeCPDialog = this.closeCPDialog.bind(this);
         this.submitProfileForm = this.submitProfileForm.bind(this);
+        this.doResetPasswordInternal = this.doResetPasswordInternal.bind(this);
     }
     componentDidMount() {
         console.log(this.props.user)
+    }
+    showCPDialog() {
+        this.setState({
+            showChangePasswordDialog: true
+        });
+    }
+    closeCPDialog() {
+        this.setState({
+            showChangePasswordDialog: false
+        });
     }
     showDialog() {
         let payload = this.props.user;
@@ -67,12 +82,26 @@ class Profile extends React.Component {
             showEditProfileDialog: false
         })
     }
+    doResetPasswordInternal(values) {
+        console.log(values)
+        let id = this.props.user._id;
+        let payload = {
+            id: id,
+            oldPassword: values.oldPassword,
+            password: values.password
+        };
+        this.props.dispatch(resetPasswordInternal(payload));
+        this.setState({
+            showChangePasswordDialog: false
+        });
+    }
     render() {
         const { classes } = this.props;
         return (
             <div>
                 <div style={{ display: "flex", justifyContent: "space-between", float: "right" }}>
                     <Button onClick={this.showDialog} className={classes.marginAround} alignt="right" variant="contained" color="primary" >Edit Profile</Button>
+                    <Button onClick={this.showCPDialog} className={classes.marginAround} alignt="right" variant="contained" color="primary" >Change Password</Button>
                 </div>
 
                 {this.props.user && <Table>
@@ -113,6 +142,15 @@ class Profile extends React.Component {
                     dialogContent={<UserProfileForm initialValues={this.state.initialValues ? this.state.initialValues : ""} onSubmit={this.submitProfileForm} buttonText={"Submit"} />}
                     topCloseButton={true}
                     handleUnmount={this.closeDialog}
+                />
+
+                <CustomDialog
+                    width="xs"
+                    handleMount={this.state.showChangePasswordDialog}
+                    dialogTitle={"Change Password"}
+                    dialogContent={<ChangePasswordInternalForm onSubmit={this.doResetPasswordInternal} />}
+                    topCloseButton={true}
+                    handleUnmount={this.closeCPDialog}
                 />
 
 

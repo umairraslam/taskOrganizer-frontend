@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import '../App.css';
 import { Delete } from "@material-ui/icons";
 import logo from '../logo.svg';
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
     container: {
@@ -43,7 +44,7 @@ const validate = values => {
         'lastName',
         'email'
     ]
-    
+
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = ' is required'
@@ -54,7 +55,7 @@ const validate = values => {
 
 
 
-class UserProfileForm extends React.Component {
+class SignUpForm extends React.Component {
 
     constructor(props) {
         super(props);
@@ -70,7 +71,9 @@ class UserProfileForm extends React.Component {
             <div>
 
                 <form onSubmit={handleSubmit} className={classes.container} noValidate autoComplete="off">
-                <img className={classes.logo} src={logo} alt="logo" />
+                    <img className={classes.logo} src={logo} alt="logo" />
+                    <Typography variant="title" gutterBottom>Sign Up</Typography>
+                    <br />
                     <Field
                         name="firstName"
                         type="text"
@@ -108,13 +111,35 @@ class UserProfileForm extends React.Component {
                     />
 
                     <Field
-                    name="dob"
-                    type="date"
-                    component={renderTextFieldCustom}
-                    label="Date of Birth"
-                    InputLabelProps={{ shrink: true, }}
-                    required={true}
-                    fullWidth={true}
+                        name="dob"
+                        type="date"
+                        component={renderTextFieldCustom}
+                        label="Date of Birth"
+                        InputLabelProps={{ shrink: true, }}
+                        required={true}
+                        fullWidth={true}
+
+                    />
+
+                    <Field
+                        name="password"
+                        type="password"
+                        component={renderTextFieldCustom}
+                        label="Password"
+                        InputLabelProps={{ shrink: true, }}
+                        required={true}
+                        fullWidth={true}
+
+                    />
+
+                    <Field
+                        name="confirmPassword"
+                        type="password"
+                        component={renderTextFieldCustom}
+                        label="Confirm Password"
+                        InputLabelProps={{ shrink: true, }}
+                        required={true}
+                        fullWidth={true}
 
                     />
 
@@ -128,7 +153,7 @@ class UserProfileForm extends React.Component {
 
 
 export default reduxForm({
-    form: 'UserProfileForm', // a unique identifier for this form
+    form: 'SignUpForm', // a unique identifier for this form
     validate,
     asyncValidate
-})(withStyles(styles)(UserProfileForm));
+})(withStyles(styles)(SignUpForm));

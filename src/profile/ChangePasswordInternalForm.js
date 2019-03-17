@@ -27,11 +27,20 @@ const validate = values => {
   const errors = {}
   const requiredFields = [
     'email',
-    'password'
+    'oldPassword',
+    'password',
+    'confirmNewPassword'
   ]
+  
+  if(values.confirmNewPassword && values.password){
+      if(values.confirmNewPassword !== values.password){
+        errors.confirmNewPassword = " does not match."
+        return errors;
+      }
+  }
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = 'required'
+      errors[field] = 'is required'
     }
   })
   return errors
@@ -39,37 +48,43 @@ const validate = values => {
 
 
 
-const SignInForm = props => {
+const ChangePasswordInternalForm = props => {
   const { classes, handleSubmit, submitting } = props
   return (
     <form onSubmit={handleSubmit} className={classes.container} noValidate autoComplete="off">
-    <img className={classes.logo} src={logo} alt="logo" />
+    
         <Field
-          name="email"
-          type="email"
+          name="oldPassword"
+          type="password"
           component={renderTextField}
-          label="Email"
+          label="Old Password"
           fullWidth
           InputLabelProps={{ shrink: true, }}
         />
-        <Field 
-          name="password" 
-          type="password" 
-          component={renderTextField} 
-          label="Password"
+        <Field
+          name="password"
+          type="password"
+          component={renderTextField}
+          label="New Password"
           fullWidth
           InputLabelProps={{ shrink: true, }}
         />
-      <Button type="submit" variant="contained" size="large" disabled={submitting} color="primary" className={classes.btnBlock} >Login</Button>
-      <p style={{marginTop: '1rem'}}><Link to="/forgotpassword" display="body1" style={{color: '#999'}}>Forgot your password?</Link></p>
-      <p style={{marginTop: '1rem'}}>Don't have an account? <Link to="/signUp" display="body1" style={{color: '#999'}}>Sign Up</Link></p>
+        <Field
+          name="confirmNewPassword"
+          type="password"
+          component={renderTextField}
+          label="Confirm New Password"
+          fullWidth
+          InputLabelProps={{ shrink: true, }}
+        />
+      <Button type="submit" variant="contained" size="large" disabled={submitting} color="primary" className={classes.btnBlock} >Change Password</Button>
+      
     </form>
   )
 }
 
 
 export default reduxForm({
-  form: 'SignInForm', // a unique identifier for this form
-  validate,
-  asyncValidate
-})(withStyles(styles)(SignInForm));
+  form: 'ChangePasswordInternalForm', // a unique identifier for this form
+  validate
+})(withStyles(styles)(ChangePasswordInternalForm));

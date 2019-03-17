@@ -13,6 +13,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Profile from './profile/Profile';
 import ForgotPassword from './auth/ForgotPassword';
 import ResetPassword from './auth/ResetPassword';
+import SignUp from './auth/SignUp';
 
 const PrivateRoute = ({ props ,component, isAuthenticated, ...rest }) => ( // eslint-disable-line
   jwt.verify(localStorage.getItem('token')
@@ -45,6 +46,7 @@ class App extends Component {
         <Switch>
           <Route path="/" exact render={() => <Redirect to="/login" />} />
           <Route path="/login" exact component={SignIn} />
+          <Route path="/signUp" exact component={SignUp} />
           <Route path="/forgotpassword" exact component={ForgotPassword} />
           <Route path="/resetpassword/:resettoken" component={ResetPassword}/>
           <PrivateRoute props={this.props}  isAuthenticated={this.props.isAuthenticated} path="/app" component={Landing} />

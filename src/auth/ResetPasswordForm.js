@@ -6,8 +6,8 @@ import { renderTextFieldCustom } from '../reusable/reduxForm/FormAttributes'
 import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
 import { Typography } from '@material-ui/core';
-import { Tooltip, IconButton , Grid } from '@material-ui/core';
-import { Info, Lock} from '@material-ui/icons';
+import { Tooltip, IconButton, Grid } from '@material-ui/core';
+import { Info, Lock } from '@material-ui/icons';
 import GridContainer from '../reusable/Grid/GridContainer';
 import GridItem from '../reusable/Grid/GridItem';
 
@@ -70,19 +70,19 @@ const ResetPasswordForm = props => {
 
             <GridContainer>
                 <GridItem style={{ display: 'flex' }} lg={12}>
-                <Grid xs={2} style={{ justifyContent: 'flex-start' }} item>
-                            <Tooltip disableFocusListener={true} title={
-                                    <div>
-                                        1.Password must be 8 characters long <br />
-                                        2.Password must be alpha numeric <br />
-                                        3.Password must contain at least 1 capital letter<br />
-                                        4.Password must contain at least 1 special character
+                    <Grid xs={2} style={{ justifyContent: 'flex-start' }} item>
+                        <Tooltip disableFocusListener={true} title={
+                            <div>
+                                1.Password must be 8 characters long <br />
+                                2.Password must be alpha numeric <br />
+                                3.Password must contain at least 1 capital letter<br />
+                                4.Password must contain at least 1 special character
                                     </div>
-                                    } placement="right">
-                                    <IconButton style={{padding: '10px', height: '44px', marginTop: '1rem'}}>
-                                        <Info />
-                                    </IconButton>
-                            </Tooltip>
+                        } placement="right">
+                            <IconButton style={{ padding: '10px', height: '44px', marginTop: '1rem' }}>
+                                <Info />
+                            </IconButton>
+                        </Tooltip>
                     </Grid>
                     <Grid lg={12}>
                         <Field
@@ -91,38 +91,38 @@ const ResetPasswordForm = props => {
                             component={renderTextFieldCustom}
                             label="Password"
                             placeholder="Password"
-                            fullWidth/>    
+                            fullWidth />
                     </Grid>
-                    
+
                 </GridItem>
             </GridContainer>
             <GridContainer>
-               <GridItem style={{ display: 'flex' }} lg={12}>
-                                     <Grid xs={2} style={{ justifyContent: 'flex-start' }} item>
-                                     <Tooltip disableFocusListener={true} title={
-                                    <div>
-                                        Confirm Password
+                <GridItem style={{ display: 'flex' }} lg={12}>
+                    <Grid xs={2} style={{ justifyContent: 'flex-start' }} item>
+                        <Tooltip disableFocusListener={true} title={
+                            <div>
+                                Confirm Password
                                     </div>
-                                    } placement="right">
-                                    <IconButton style={{padding: '10px', height: '44px', marginTop: '1rem'}}>
-                                        <Lock />
-                                    </IconButton>
-                            </Tooltip>
-                                     </Grid>
+                        } placement="right">
+                            <IconButton style={{ padding: '10px', height: '44px', marginTop: '1rem' }}>
+                                <Lock />
+                            </IconButton>
+                        </Tooltip>
+                    </Grid>
 
-<Grid lg={12}>
+                    <Grid lg={12}>
 
 
-     <Field
-                    name="confirm_password"
-                    type="password"
-                    component={renderTextFieldCustom}
-                    label="Confirm Password"
-                    placeholder="Confirm Password"
-                    fullWidth
-                />
-</Grid>
-                   
+                        <Field
+                            name="confirm_password"
+                            type="password"
+                            component={renderTextFieldCustom}
+                            label="Confirm Password"
+                            placeholder="Confirm Password"
+                            fullWidth
+                        />
+                    </Grid>
+
                 </GridItem>
             </GridContainer>
 
