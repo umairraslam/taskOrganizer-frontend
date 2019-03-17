@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import SignIn from '../src/auth/SignIn';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
@@ -10,11 +9,32 @@ import { connect } from 'react-redux';
 import jwt from 'jsonwebtoken';
 import {logoutUser} from './actions/auth';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Profile from './profile/Profile';
 import ForgotPassword from './auth/ForgotPassword';
 import ResetPassword from './auth/ResetPassword';
 import SignUp from './auth/SignUp';
+import indigo from '@material-ui/core/colors/indigo';
+import pink from '@material-ui/core/colors/pink';
+import red from '@material-ui/core/colors/red';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
+const theme = createMuiTheme({
+  palette: {
+    type: 'light',
+    // primary: {
+    //   // light: will be calculated from palette.primary.main,
+    //   main: '#ff4400',
+    //   // dark: will be calculated from palette.primary.main,
+    //   // contrastText: will be calculated to contrast with palette.primary.main
+    // },
+    // secondary: {
+    //   light: '#0066ff',
+    //   main: '#0044ff',
+    //   // dark: will be calculated from palette.secondary.main,
+    //   contrastText: '#ffcc00',
+    // },
+    // error: will use the default color
+  },
+});
 const PrivateRoute = ({ props ,component, isAuthenticated, ...rest }) => ( // eslint-disable-line
   jwt.verify(localStorage.getItem('token')
       , process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
@@ -43,6 +63,7 @@ class App extends Component {
     return (
       <div className="App">
       {this.props.showLoader && <LinearProgress />}
+      <MuiThemeProvider theme={theme}>
         <Switch>
           <Route path="/" exact render={() => <Redirect to="/login" />} />
           <Route path="/login" exact component={SignIn} />
@@ -51,6 +72,7 @@ class App extends Component {
           <Route path="/resetpassword/:resettoken" component={ResetPassword}/>
           <PrivateRoute props={this.props}  isAuthenticated={this.props.isAuthenticated} path="/app" component={Landing} />
         </Switch>
+        </MuiThemeProvider>
         <CustomizedSnackBars
           close={setTimeout(() => { this.props.dispatch(hideSuccess()) }, 3000)}
           variant={"success"}
@@ -74,5 +96,4 @@ const mapStateToProps = state => {
     showLoader: state.loader.showLoader
   };
 }
-
 export default withRouter(connect(mapStateToProps)(App));
